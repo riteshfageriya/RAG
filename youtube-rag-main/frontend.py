@@ -1,15 +1,22 @@
 # frontend.py
 import streamlit as st
-from rag_mindflix import VideoQASystem  # Import from the correct file
+from rag_mindflix import VideoQASystem  # Ensure this import is correct
 from pytube import YouTube
 import tempfile
 import time
 import logging
 
+# Disable Streamlit's file watcher (if not already done via config.toml)
+st.set_option('server.fileWatcherType', 'none')
+
 # Initialize system
 @st.cache_resource
 def load_system():
-    return VideoQASystem()
+    try:
+        return VideoQASystem()
+    except Exception as e:
+        st.error(f"Failed to initialize VideoQASystem: {str(e)}")
+        return None
 
 qa_system = load_system()
 
